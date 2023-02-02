@@ -1,7 +1,7 @@
 # secure-code-for-fullstack-developers
 this code is sanized and reviewed by bug hunters and developers take a look;
 Security
-#SQL Injection Protection
+# SQL Injection Protection
 using  mysqli prepared statements for all database interactions, which eliminates most risks of SQL injection. There is no raw SQL query used anywhere, and moreover, all data input by user is verified and checked before being used in any application functionality. Hence further hardening the security measures.
 
 // example database query
@@ -19,7 +19,7 @@ else {
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
 }
-#Header & Email Injection Protection
+# Header & Email Injection Protection
  the _cleaninjections() function defined in the assets/includes/security_functions.php to filter and validate data. Any and all data entered by users for any functionality is checked for header injection before being used. The filter functions remove any character(s) that may prove to be a threat, thus rendering any malicious script or data harmless.
 
 On all back functionality, each and every single value being passed in the POST body is checked for possible injection. The same holds for emails, preventing users to add additional email-specific fields in it. This greatly reduces the risk of Header or Email injection.
@@ -30,7 +30,7 @@ foreach($_POST as $key => $value){
 
   $_POST[$key] = _cleaninjections(trim($value));
 }
-#CSRF Protection
+# CSRF Protection
 There are also heavy protection measures against CSRF attempts. A secure csrf token is generated on session start, and sent as a hidden value in the post body for all forms, where it is validated and only allows the script to proceed if the validation succeeds. The csrf protection works for all forms regardless of whether the user is logged in or not.
 
 The csrf token is handled by the functions present in the assets/includes/security_functions.php file. The token is encrypted to keep it from being extracted and exploited.
@@ -51,7 +51,7 @@ The cookie set for the remember-me feature uses encrypted selector and validator
 Secure Account Activation & Password Reset
 The features for account activation and password reset both use a link sent via email which also uses encrypted encrypted selector and validator values. All three features, namely remember-me cookies, account activation and password reset use the auth_tokens table to store the encrypted tokens and selector. Each of the tokens have an expiry time, meaning that once expired, they cannot be used. All tokens are deleted on being used, so they cannot be used over and over again.
 
-#Login | Signup
+# Login | Signup
 when developing an app you should support a default and secure login and signup system. The user can signup to make a new account, and then will be prompted to login to the new account with his credentials. The user can also set his profile image on signup. To make a new account, the user must set a unique username and email. There are also additional information fields available, but they are optional and can be skipped.
 
 The login system also supports a remember me feature, which will keep the user logged in for a certain time (currently a month) even if the browser or system is turned off.
@@ -85,7 +85,7 @@ The database fields which determines if the account is verified/unlocked or not 
 
 On login, the script checks the verified_at column and sets the value of $_SESSION['auth'] accordingly. If the user is unverified, he is redirected to the APPLICATION_PATH/verify page where he is prompted to activate his account with the sent email. In case that the user did not receive the email, an option is provided for him to resend that email. Once the account is activated and the page is refreshed, the user will be redirected away from the verify page to the default APPLICATION_PATH/home page.
 
-#Password Resetting
+# Password Resetting
 There is also a password reset system, or by well known terminology, a forgot password? feature. Link to that feature is present on the login page below the login form, and requires that the user input his email with which he had signed up. If the email is not present in the database, the request is ignored, and if it is, a highly secure confirmation email is sent to the user. The user can access the link provided in that email, which will force him to recreate his password, and once done, will prompt the user to log in with the new credentials.
 
 The confirmation / reset email uses the auth_tokens table in the database to create a secure selector and token for the user, then appends them to the reset link after encryption. The token has a certain expiry time (currently 1 hour), after which it becomes invalid.
@@ -124,7 +124,7 @@ setcookie(
 );
 To validate the cookie, the system uses the check_remember_me() function in the assets/includes/auth_functions.php file. Once the encrypted values are verified against the ones stored in the database, it calls the force_login() method which simply creates the relevant session variables for the user and logs him/her into the application.
 
-#GLOBAL temporary ERROR & STATUS values
+# GLOBAL temporary ERROR & STATUS values
 developer  must use a global ERROR and STATUS variable for any errors and page status, assigned as an associative array to $_SESSION['ERRORS'] and $_SESSION['STATUS'], with the keys being error/status names and values being the messages. These values are temporary, meaning that the error values disappear when the page is refreshed, returning the page to its original state. This keeps the URLs clean (by not using URL queries) and the associative array means that on occurence of any error, a new key with any name could be created and given the error message as the value, and could easily be dealt with on the frontend files as well.
 
 For example, an example of creating an error and assigning it to $_SESSION['ERRORS'] in a backend script is:
